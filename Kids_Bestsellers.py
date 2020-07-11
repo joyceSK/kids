@@ -1,8 +1,8 @@
 import pandas as pd
 import streamlit as st
 
-data = pd.read_excel("C://Users//nikhil.agarwal//Downloads//kids_bestseller.xlsx")
-supplier_check = pd.read_excel("C://Users//nikhil.agarwal//Downloads//supplier_check.xlsx")
+data = pd.read_excel("kids_bestseller.xlsx")
+supplier_check = pd.read_excel("supplier_check.xlsx")
 suppliers = list(supplier_check.supplier_id)
 
 st.title("Kids Clothing Bestsellers")

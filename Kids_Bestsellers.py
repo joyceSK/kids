@@ -20,5 +20,4 @@ if supplier_id_input in suppliers:
 else:
     st.error("Please check the supplier id")
 
-ss
 

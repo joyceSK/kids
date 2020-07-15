@@ -1,1 +1,1 @@
-web: sh setup.sh && streamlit run Kids_Bestsellers.py 
+web: sh setup.sh && streamlit run Kids_Bestsellers.py

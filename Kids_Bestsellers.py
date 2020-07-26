@@ -1,7 +1,7 @@
 import pandas as pd
 import streamlit as st
 
-data = pd.read_excel("kids_bestseller_1.xlsx")
+data = pd.read_excel("kids bestsellers1.xlsx")
 supplier_check = pd.read_excel("supplier_check.xlsx")
 suppliers = list(supplier_check.supplier_id)
 

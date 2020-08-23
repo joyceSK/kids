@@ -1,7 +1,7 @@
 import pandas as pd
 import streamlit as st
 
-data_duplicates = pd.read_excel("kids bestsellers1.xlsx")
+data_duplicates = pd.read_excel("kids bestsellers2.xlsx")
 data_oos = pd.read_excel("kids_oos.xlsx")
 supplier_check = pd.read_excel("supplier_check.xlsx")
 suppliers = list(supplier_check.supplier_id)
@@ -11,7 +11,7 @@ st.title("Kids Clothing - Sourcing and Inventory Planning")
 supplier_id_input = int(st.number_input("Enter Supplier ID"))
 
 if supplier_id_input in suppliers:
-    status = st.radio("Please select", ("Duplicates","Out of Stock","Inventory Planning"))
+    status = st.radio("Please select", ("Best Sellers","Out of Stock"))
 
     if status == 'Duplicates':
         category = st.selectbox("Select Category",data_duplicates.sscat.unique())

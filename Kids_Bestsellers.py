@@ -14,7 +14,7 @@ supplier_email_input = st.text_input("Enter Registered Email ID")
 
 #if supplier_id_input in suppliers:
 if supplier_email_input in suppliers_email:
-    supplier_id_input = supplier_check[supplier_check.email==supplier_email_input].supplier_id[0]
+    supplier_id_input = supplier_check[supplier_check.email==supplier_email_input].supplier_id.iloc[0]
     st.write("Supplier id - ",supplier_id_input)
     status = st.radio("Please select", ("Best Sellers","Trending Products - Low Stock"))
 

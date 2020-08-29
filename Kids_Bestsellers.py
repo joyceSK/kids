@@ -4,13 +4,18 @@ import streamlit as st
 data_duplicates = pd.read_excel("kids bestsellers2.xlsx")
 data_oos = pd.read_excel("kids_oos.xlsx")
 supplier_check = pd.read_excel("supplier_check.xlsx")
-suppliers = list(supplier_check.supplier_id)
+#suppliers = list(supplier_check.supplier_id)
+suppliers_email = list(supplier_check.email)
 
-st.title("Kids Clothing - Sourcing and Inventory Planning")
+st.title("Kids Clothing - Trending Products")
 
-supplier_id_input = int(st.number_input("Enter Supplier ID"))
+#supplier_id_input = int(st.number_input("Enter Supplier ID"))
+supplier_email_input = st.text_input("Enter Registered Email ID")
 
-if supplier_id_input in suppliers:
+#if supplier_id_input in suppliers:
+if supplier_email_input in suppliers_email:
+    supplier_id_input = supplier_check[supplier_check.email==supplier_email_input].supplier_id[0]
+    st.write("Supplier id - ",supplier_id_input)
     status = st.radio("Please select", ("Best Sellers","Trending Products - Low Stock"))
 
     if status == 'Best Sellers':
@@ -33,6 +38,6 @@ if supplier_id_input in suppliers:
         st.image(images_oos,width=300,caption=caption_oos)
         
 else:
-    st.error("Please check the supplier id")
+    st.error("Please check the registered email id")
 
 

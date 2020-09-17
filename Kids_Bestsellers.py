@@ -7,13 +7,13 @@ from datetime import timedelta
 supplier_check = pd.read_excel("supplier_check.xlsx")
 
 #Inventory projection data import
-#@st.cache
-#def load_order_data():
-#    df = pd.read_excel("orders.xlsx")
-#    return df
+@st.cache
+def load_order_data():
+    df = pd.read_excel("orders.xlsx")
+    return df
 
-#data_projection = load_order_data()
-data_projection = pd.read_excel("orders.xlsx")
+data_projection = load_order_data()
+#data_projection = pd.read_excel("orders.xlsx")
 projection_summary = pd.read_excel("summary.xlsx")
 data_inv = pd.read_excel("inventory.xlsx")
 

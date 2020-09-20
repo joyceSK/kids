@@ -1,7 +1,21 @@
 import pandas as pd
 import streamlit as st
 from datetime import timedelta
+import numpy as np
 
+def _max_width_():
+    max_width_str = f"max-width: 2000px;"
+    st.markdown(
+        f"""
+    <style>
+    .reportview-container .main .block-container{{
+        {max_width_str}
+    }}
+    </style>    
+    """,
+        unsafe_allow_html=True,
+    )
+_max_width_()    
 #data_duplicates = pd.read_excel("kids bestsellers2.xlsx")
 #data_oos = pd.read_excel("kids_oos.xlsx")
 supplier_check = pd.read_excel("supplier_check.xlsx")
@@ -29,6 +43,7 @@ supplier_email_input = st.text_input("Enter Registered Email ID")
 if supplier_email_input in suppliers_email:
     supplier_id_input = supplier_check[supplier_check.email==supplier_email_input].supplier_id.iloc[0]
     st.write("Supplier id - ",supplier_id_input)
+    st.write("**Row is marked in Yellow when the inventory on hand is less than 10 days**")
 #    status = st.radio("Please select", ("Inventory Projection"))
 
     data_projection_sup = data_projection[data_projection.supplier_id == supplier_id_input]
@@ -55,17 +70,30 @@ if supplier_email_input in suppliers_email:
     projection_temp1 = projection_summary_sup.merge(data_inv_sup[['product_id','variation','live_inventory']],on=['product_id','variation'],how='left')
     projection_final = projection_temp1.merge(df_perdaysale[['product_id','variation','per_day_sale']], on=['product_id','variation'],how='left')
     #DOH
-    projection_final['days_on_hand'] = round(projection_final.live_inventory/projection_final.per_day_sale,1)
+    #projection_final['days_on_hand'] = round(projection_final.live_inventory/projection_final.per_day_sale,1)
+
+    projection_final['days_on_hand'] = np.where(projection_final.live_inventory==0, projection_final.live_inventory, round(projection_final.live_inventory/projection_final.per_day_sale,1))
+    
+
     #Additional Inv Required
     
-    projection_final['Additional_inventory_needed'] = round((30 - projection_final.days_on_hand) * projection_final.per_day_sale,0)
+    projection_final['30_days_projected_inventory'] = round((30 - projection_final.days_on_hand) * projection_final.per_day_sale,0)
+    projection_final['30_days_projected_inventory'] = projection_final['30_days_projected_inventory'].clip(lower=0)
 
     projection_final.fillna("",inplace=True)
     #selecting 80% oc pids
     selected_pid = ((data_projection_sup.groupby(['product_id']).orders.sum().sort_values(ascending=False)*100/data_projection_sup.orders.sum()).cumsum() <80)
     pid_80_oc = list(selected_pid[selected_pid].index)
+
+    def highlight_greaterthan(s, threshold, column):
+        is_max = pd.Series(data=False, index=s.index)
+        is_max[column] = s.loc[column] < threshold
+        return ['background-color: yellow' if is_max.any() else '' for v in is_max]
+    
     for pid in pid_80_oc:
-        st.write(projection_final[projection_final.product_id == pid])
+    #    st.dataframe(projection_final[projection_final.product_id == pid].style.apply(highlight_greaterthan, threshold=10.0, column='days_on_hand', axis=1))
+        st.table(projection_final[projection_final.product_id == pid].style.apply(highlight_greaterthan, threshold=10.0, column='days_on_hand', axis=1))
+    
 
 # ################### Showing all radio buttons 
 #     status = st.radio("Please select", ("Best Sellers","Trending Products - Low Stock","Inventory Projection"))

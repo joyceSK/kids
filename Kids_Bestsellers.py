@@ -45,7 +45,6 @@ if supplier_email_input in suppliers_email:
     st.write("Supplier id - ",supplier_id_input)
     st.write("**Row is marked in Yellow when the inventory on hand is less than 10 days**")
 #    status = st.radio("Please select", ("Inventory Projection"))
-
     data_projection_sup = data_projection[data_projection.supplier_id == supplier_id_input]
     projection_summary_sup = projection_summary[projection_summary.supplier_id == supplier_id_input].drop('supplier_id',axis=1)
     data_inv_sup = data_inv[data_inv.supplier_id == supplier_id_input]
@@ -91,6 +90,7 @@ if supplier_email_input in suppliers_email:
         return ['background-color: yellow' if is_max.any() else '' for v in is_max]
     
     num_cols = projection_final.select_dtypes(include=np.number).columns.tolist()
+
     for pid in pid_80_oc:
         st.table(projection_final[projection_final.product_id == pid].style.apply(highlight_greaterthan, threshold=10, column='days_on_hand', axis=1).format("{:.0f}",subset=num_cols))
     #    st.dataframe(projection_final[projection_final.product_id == pid].style.apply(highlight_greaterthan, threshold=10.0, column='days_on_hand', axis=1))

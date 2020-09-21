@@ -92,8 +92,10 @@ if supplier_email_input in suppliers_email:
     
     num_cols = projection_final.select_dtypes(include=np.number).columns.tolist()
     for pid in pid_80_oc:
+        st.table(projection_final[projection_final.product_id == pid].style.apply(highlight_greaterthan, threshold=10, column='days_on_hand', axis=1))
     #    st.dataframe(projection_final[projection_final.product_id == pid].style.apply(highlight_greaterthan, threshold=10.0, column='days_on_hand', axis=1))
-        st.table(projection_final[projection_final.product_id == pid])
+    #    st.table(projection_final[projection_final.product_id == pid])
+        
     #    st.table(projection_final[projection_final.product_id == pid].style.apply(highlight_greaterthan, threshold=10, column='days_on_hand', axis=1).format('{:.2f}', subset=pandas)
         #test_1 = projection_final[projection_final.product_id == pid].style.apply(highlight_greaterthan, threshold=10, column='days_on_hand', axis=1)
         #st.table(test_1.round())
